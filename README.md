@@ -1,5 +1,5 @@
 # OliveOwl
-
+<img src="assets/OliveOwl.png" alt="Alt text" width="300">
 ## <b> An Olive Mill Management System <b>
 ---
 ## Overview
