@@ -1,5 +1,5 @@
 # OliveOwl
-<img src=""C:\Users\User\Pictures\Screenshots\Μινιμαλιστικό Λογότυπο Κουκουβάγιας και Ελιάς.png" alt="Alt text" width="300">
+
 ## <b> An Olive Mill Management System <b>
 ---
 ## Overview
