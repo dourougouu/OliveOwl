@@ -1,7 +1,6 @@
 # OliveOwl
-<img src="assets/OliveOwl.png" alt="Olive Owl Logo" width="300">
-
-### An Olive Mill Management System
+<img src="assets/OliveOwl.png" alt="Olive Owl Logo" width="150">
+### **An Olive Mill Management System**
 ---
 
 ## Overview
