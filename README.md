@@ -15,4 +15,16 @@ Here I will develop a software application for managing the basic operations of 
 ## Dependencies
 
 **Database**
-- PostgreSQL version 18.6
+- PostgreSQL: 18.6
+
+**Backend**
+- Python: 
+- FastAPI:
+- Uvicorn:
+- Psycopg 3:
+- python-dotenv:
+
+**Development Tools**
+- VScode
+- Git & GitHub
+- Python Virtual Environment (venv)
