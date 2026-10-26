@@ -39,3 +39,30 @@ CREATE TABLE olive_ProductDeliv(
 
 CREATE INDEX indx_deliveryprod_producer_date
 		ON olive_ProductDeliv(producer_id, delivery_date);
+
+
+CREATE TABLE oil_settlement(
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	delivery_id BIGINT NOT NULL UNIQUE
+				REFERENCES olive_productdeliv(id),
+	producer_oil_share_kg NUMERIC(10,2)
+						  CHECK (producer_oil_share_kg >=0),
+	oil_collected_kg NUMERIC(10,2)
+					 CHECK (oil_collected_kg >=0),
+	oil_collection_date DATE,
+	settlement_date DATE,
+	notes TEXT,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+	CHECK (
+			(oil_collected_kg IS NULL AND oil_collection_date IS NULL)
+			OR
+			(oil_collected_kg IS NOT NULL AND oil_collection_date IS NOT NULL)
+	),
+
+	CHECK (
+			producer_oil_share_kg IS NULL
+			OR oil_collected_kg IS NULL
+			OR oil_collected_kg <= producer_oil_share_kg
+	)
+);
