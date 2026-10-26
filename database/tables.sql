@@ -66,3 +66,18 @@ CREATE TABLE oil_settlement(
 			OR oil_collected_kg <= producer_oil_share_kg
 	)
 );
+
+
+CREATE TABLE charges(
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	settlement_id BIGINT NOT NULL
+				  REFERENCES oil_settlement(id),
+	description VARCHAR(200) NOT NULL,
+	amount NUMERIC(10,2) NOT NULL
+		   CHECK (amount >=0),
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+
+CREATE INDEX indx_charge_settlement
+		ON charge (settlement_id);
