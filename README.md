@@ -18,11 +18,11 @@ Here I will develop a software application for managing the basic operations of 
 - PostgreSQL: 18.6
 
 **Backend**
-- Python: 
-- FastAPI:
-- Uvicorn:
-- Psycopg 3:
-- python-dotenv:
+- Python: 3.14.2
+- FastAPI: Backend API Framework
+- Uvicorn: ASGI server for running the FastAPI application
+- Psycopg 3: PostgreSQL database adapter
+- python-dotenv: Environment variable configuration
 
 **Development Tools**
 - VScode
