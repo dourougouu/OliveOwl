@@ -1,4 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
+from datetime import date
+from decimal import Decimal
+from typing import Literal
 
 class ProducerCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -17,5 +20,28 @@ class ProducerCreate(BaseModel):
     tk: str = Field(min_length=1, max_length=5)
     dhmos: str = Field(min_length=1, max_length=255)
     doy: str = Field(min_length=1, max_length=255)
+
+    notes: str | None = None
+
+class DeliveryCreate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    producer_id: int = Field(gt=0)
+    delivery_date: date
+
+    olive_weight_kg: Decimal = Field(
+        gt=0,
+        max_digits=10,
+        decimal_places=2
+    )
+
+    olive_variety: Literal[
+        "koroneiki",
+        "manaki",
+        "athinolia",
+        "tsounati",
+        "kalamwn",
+        "konservolia"
+    ]
 
     notes: str | None = None

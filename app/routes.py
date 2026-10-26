@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, status
 from psycopg import Error
 from psycopg.rows import dict_row
-from psycopg.errors import UniqueViolation
+from psycopg.errors import UniqueViolation, ForeignKeyViolation
 
 from app.database import get_database_connection
-from app.schemas import ProducerCreate
+from app.schemas import ProducerCreate, DeliveryCreate
 
 router = APIRouter()
 
@@ -75,4 +75,73 @@ def create_producer(producer: ProducerCreate):
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                             detail="Could not create producer in the database",)
 
-    
+
+
+@router.get("/product_deliveries")
+def get_deliveries():
+    query = """ SELECT  d.id,
+                        d.producer_id,
+                        p.first_name,
+                        p.last_name,
+                        d.delivery_date,
+                        d.olive_weight_kg,
+                        d.olive_variety,
+                        d.notes,
+                        d.created_at
+                FROM olive_productdeliv AS d
+                JOIN producer AS p
+                    ON p.id = d.producer_id
+                ORDER BY d.delivery_date DESC, d.id DESC; """
+
+    try:
+        with get_database_connection() as conn:
+            with conn.cursor(row_factory=dict_row) as cursor:
+                cursor.execute(query)
+                deliveries = cursor.fetchall()
+
+        return {
+            "product_deliveries": deliveries,
+            "count": len(deliveries),
+        }
+
+    except Error:
+        raise HTTPException(
+            status_code=503,
+            detail="Could not retrieve deliveries from the database.",
+        )
+
+
+@router.post("/product_deliveries", status_code=status.HTTP_201_CREATED)
+def create_delivery(delivery: DeliveryCreate):
+    query = """ INSERT INTO olive_productdeliv(
+                                                producer_id,
+                                                delivery_date,
+                                                olive_weight_kg,
+                                                olive_variety,
+                                                notes
+                                                )
+                VALUES (
+                        %(producer_id)s,
+                        %(delivery_date)s,
+                        %(olive_weight_kg)s,
+                        %(olive_variety)s,
+                        %(notes)s
+                        )
+                RETURNING id, producer_id, delivery_date, olive_weight_kg, olive_variety, notes, created_at; """
+
+    try: 
+        with get_database_connection() as conn:
+            with conn.cursor(row_factory=dict_row) as cursor:
+                cursor.execute(query, delivery.model_dump())
+                new_delivery = cursor.fetchone()
+
+        return {
+            "message": "Delivery created successfully!",
+            "product_delivery": new_delivery,
+        }
+
+    except ForeignKeyViolation:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The specified producer doesn't exist in the database!",)
+
+    except Error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Could not create delivery in the database",)
