@@ -80,4 +80,4 @@ CREATE TABLE charges(
 
 
 CREATE INDEX indx_charge_settlement
-		ON charge (settlement_id);
+		ON charges (settlement_id);
