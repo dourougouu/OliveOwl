@@ -14,5 +14,5 @@ Here I will develop a software application for managing the basic operations of 
 
 ## Dependencies
 
-** Database **
+**Database**
 - PostgreSQL version 18.6
